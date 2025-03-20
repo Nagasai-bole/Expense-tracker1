@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Tracker</title>
+    <style rel="style"></style>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="logout">
+        <a href="/logout">Logout</a>
+      </div>
+      <h1>Expense Tracker</h1>
+      <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+      <div class="error-message"><%= errorMessage %></div>
+      <% } %>
+      <section class="add-expense">
+        <h2>Add New Expense</h2>
+        <form id="expense-form">
+          <input
+            type="number"
+            id="amount"
+            placeholder="Amount"
+            required
+            step="1"
+          />
+          <select id="category" required>
+            <option value="" disabled selected>Select Category</option>
+            <option value="Food">Food</option>
+            <option value="Transport">Transport</option>
+            <option value="Bills">Bills</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Other">Other</option>
+          </select>
+          <input
+            type="text"
+            id="description"
+            placeholder="Description (optional)"
+          />
+          <button type="submit">Add</button>
+        </form>
+        <div id="message"></div>
+      </section>
+      <section class="filters">
+        <h2>Filter Expenses</h2>
+        <select id="filter-category">
+          <option value="">All Categories</option>
+          <option value="Food">Food</option>
+          <option value="Transport">Transport</option>
+          <option value="Bills">Bills</option>
+          <option value="Entertainment">Entertainment</option>
+          <option value="Shopping">Shopping</option>
+          <option value="Other">Other</option>
+        </select>
+        <input type="date" id="start-date" />
+        <input type="date" id="end-date" />
+        <button onclick="filterExpenses()">Filter</button>
+      </section>
+      <section class="expenses">
+        <h2>Your Expenses</h2>
+        <table id="expense-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Category</th>
+              <th>Description</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="expense-list">
+            <% if (typeof expenses !== 'undefined' && Array.isArray(expenses) &&
+            expenses.length > 0) { %> <% expenses.forEach(expense => { %>
+            <tr data-id="<%= expense.id %>">
+              <td>
+                <% if (expense.date instanceof Date &&
+                !isNaN(expense.date.getTime())) { %> <%=
+                expense.date.getDate().toString().padStart(2, '0') + '/' +
+                (expense.date.getMonth() + 1).toString().padStart(2, '0') + '/'
+                + expense.date.getFullYear() %> <% } else { %> N/A <% } %>
+              </td>
+              <td>
+                <% if (typeof expense.amount === 'number') { %> ₹<%=
+                expense.amount.toLocaleString('en-IN', { minimumFractionDigits:
+                2, maximumFractionDigits: 2 }) %> <% } else { %> N/A <% } %>
+              </td>
+              <td><%= expense.category || 'N/A' %></td>
+              <td><%= expense.description || '' %></td>
+              <td>
+                <button
+                  class="delete-btn"
+                  onclick="deleteExpense('<%= expense.id %>')"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+            <% }) %> <% } else { %>
+            <tr>
+              <td colspan="5">No expenses found.</td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+        <div id="total-expenses" class="total-expenses"></div>
+      </section>
+    </div>
+
+    <script src="/js/script.js"></script>
+  </body>
+</html>
