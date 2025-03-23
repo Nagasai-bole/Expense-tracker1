@@ -15,6 +15,15 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "public")));
 
+const functions = require("firebase-functions");
+const admin = require("firebase-admin");
+
+admin.initializeApp();
+
+exports.helloWorld = functions.https.onRequest((req, res) => {
+  res.json({ message: "Hello from Firebase!" });
+});
+
 const sessionOptions = {
   secret: "mysecretcode",
   resave: false,
