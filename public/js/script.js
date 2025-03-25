@@ -191,7 +191,7 @@ async function deleteExpense(expenseId) {
       throw new Error(errorText || "Failed to delete expense");
     }
     showMessage("Expense deleted successfully", "success");
-    loadExpenses(); // Refresh the expense list
+    loadExpenses();
   } catch (error) {
     console.error("Delete expense error:", error);
     showMessage("Error deleting expense: " + error.message, "error");
